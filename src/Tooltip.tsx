@@ -31,7 +31,6 @@ export const Tooltip = ({ chart, children }: Props) => {
 					chart.tooltip.refresh.apply(chart.tooltip, [this.point]);
 					chart.tooltip.hide(0);
 				}
-
 				setContext(this);
 
 				return `<div id="${generateTooltipId(chart.index)}"></div>`;

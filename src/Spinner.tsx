@@ -1,5 +1,5 @@
 import { Portal, Spinner as Cspinner } from "@chakra-ui/react";
-import React, { ForwardedRef, RefObject } from "react";
+import React, { RefObject } from "react";
 
 type SpinnerProps = {
 	isLoading: boolean;
