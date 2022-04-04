@@ -1,61 +1,35 @@
-import React, { useState, useCallback, RefObject } from "react";
+import React, { useState, useCallback } from "react";
 import Highcharts, { Chart as HighchartsChart } from "highcharts";
 import HighchartsReact from "highcharts-react-official";
 import { Tooltip } from "./Tooltip";
-import { Box, Portal, Spinner as Cspinner } from "@chakra-ui/react";
-
-const initialOptions = {
-	title: {
-		text: "Enter a value to begin visualization",
-		style: {
-			fontSize: "36px",
-		},
-	},
-	series: [
-		{
-			type: "line",
-			data: [],
-		},
-	],
-	tooltip: {
-		style: {
-			pointerEvents: "auto",
-		},
-	},
-	legend: {
-		enabled: false,
-	},
-	yAxis: [
-		{
-			title: {
-				text: undefined,
-			},
-		},
-	],
-};
+import { Box } from "@chakra-ui/react";
+import { ChartConfig } from "./constants";
 
 type ChartProps = {
+	chartConfig: ChartConfig;
 	isLoading: boolean;
 	setIsLoading: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 export const Chart = React.forwardRef<HTMLDivElement, ChartProps>(
-	({ isLoading, setIsLoading }, ref) => {
-		const [options, setOptions] = useState(initialOptions);
+	({ chartConfig, isLoading, setIsLoading }, ref) => {
 		const [chart, setChart] = useState<HighchartsChart | null>(null);
-		const callback = useCallback((chart: HighchartsChart) => {
-			setChart(chart);
-		}, []);
+		const callback = useCallback(
+			(chart: HighchartsChart) => {
+				setChart(chart);
+				setIsLoading(false);
+			},
+			[setIsLoading]
+		);
 
 		return (
 			<Box position="relative" ref={ref} marginX={10}>
 				<HighchartsReact
 					highcharts={Highcharts}
-					options={options}
+					options={chartConfig}
 					callback={callback}
 				/>
-
-				<Tooltip chart={chart}>
+				{/* <Tooltip chart={chart}>
 					{(formatterContext) => {
 						const { x, y } = formatterContext;
 						return (
@@ -69,7 +43,7 @@ export const Chart = React.forwardRef<HTMLDivElement, ChartProps>(
 							</>
 						);
 					}}
-				</Tooltip>
+				</Tooltip> */}
 			</Box>
 		);
 	}

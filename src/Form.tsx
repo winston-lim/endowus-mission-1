@@ -10,15 +10,17 @@ import {
 	VStack,
 } from "@chakra-ui/react";
 import { Formik, Field } from "formik";
-import { useState } from "react";
+import { errorChartConfig } from "./constants";
+import { fetchData } from "./helpers";
 import SubmitButton from "./SubmitButton";
 
 type FormProps = {
 	isLoading: boolean;
 	setIsLoading: React.Dispatch<React.SetStateAction<boolean>>;
+	setChartConfig: React.Dispatch<any>;
 };
 
-const Form = ({ isLoading, setIsLoading }: FormProps) => {
+const Form = ({ isLoading, setIsLoading, setChartConfig }: FormProps) => {
 	return (
 		<Box marginY={10} marginX={10}>
 			<Formik
@@ -26,10 +28,18 @@ const Form = ({ isLoading, setIsLoading }: FormProps) => {
 					initial: "",
 					monthly: "",
 				}}
-				onSubmit={(values) => {
-					console.log("SUBMITTED");
-					console.log(values);
+				onSubmit={async (values) => {
 					setIsLoading(true);
+					try {
+						const chartConfig = await fetchData(
+							parseInt(values.initial),
+							parseInt(values.monthly)
+						);
+						setChartConfig(chartConfig);
+					} catch (e) {
+						setChartConfig(errorChartConfig);
+						setIsLoading(false);
+					}
 				}}
 			>
 				{({ handleSubmit, errors, touched, values }) => (

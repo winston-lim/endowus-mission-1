@@ -1,11 +1,14 @@
 import { ChakraProvider, Box, theme, Text, Heading } from "@chakra-ui/react";
-import React from "react";
+import { createRef, useState } from "react";
 import { Chart } from "./Chart";
+import { ChartConfig, initialChartConfig } from "./constants";
 import Form from "./Form";
 import Spinner from "./Spinner";
 export const App = () => {
-	const ref = React.createRef<HTMLDivElement>();
-	const [isLoading, setIsLoading] = React.useState<boolean>(false);
+	const ref = createRef<HTMLDivElement>();
+	const [isLoading, setIsLoading] = useState<boolean>(false);
+	const [chartConfig, setChartConfig] =
+		useState<ChartConfig>(initialChartConfig);
 	return (
 		<ChakraProvider theme={theme}>
 			<Box fontSize="xl">
@@ -16,8 +19,17 @@ export const App = () => {
 						investment plan
 					</Text>
 				</Box>
-				<Form isLoading={isLoading} setIsLoading={setIsLoading} />
-				<Chart isLoading={isLoading} setIsLoading={setIsLoading} ref={ref} />
+				<Form
+					setChartConfig={setChartConfig}
+					isLoading={isLoading}
+					setIsLoading={setIsLoading}
+				/>
+				<Chart
+					chartConfig={chartConfig}
+					isLoading={isLoading}
+					setIsLoading={setIsLoading}
+					ref={ref}
+				/>
 				<Spinner isLoading={isLoading} ref={ref} />
 			</Box>
 		</ChakraProvider>
